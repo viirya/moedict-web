@@ -1,0 +1,54 @@
+
+sqlite3 = require('sqlite3').verbose!
+
+class MoeDB
+
+    constructor: (@db_path) ->
+        @db = new sqlite3.Database(@db_path)
+
+        @sql = (col, query) ->
+            """SELECT '' || title || '\t' || heteronyms.bopomofo || '\n» ' || group_concat(
+              def, '\n» '
+            ) || '\n' as result, title, heteronyms.bopomofo as bopomofo, group_concat(def, '\n') as def
+            FROM entries
+            JOIN heteronyms ON entry_id = entries.id
+            JOIN definitions ON heteronym_id = heteronyms.id
+            WHERE #{col} LIKE '#{query}'
+            GROUP BY title, heteronyms.bopomofo;"""
+
+        @sql_by_title = @sql('title', _)
+        @sql_by_def = @sql('def', _)
+        @def_cb = (err, row) ->
+            console.log(row)
+            console.log(row.result)
+ 
+    find_by_title: (title, cb = @def_cb) ->
+        @find_each(@sql_by_title(title), cb)
+
+    find_by_def: (def, cb = @def_cb) ->
+        @find_each(@sql_by_def(def), cb)
+ 
+    find_all_by_title: (title, cb = @def_cb) ->
+        @find_all(@sql_by_title(title), cb)
+
+    find_all_by_def: (def, cb = @def_cb) ->
+        @find_all(@sql_by_def(def), cb)
+ 
+    find_all: (sql, cb) -> 
+        if @db?
+            () <~ @db.serialize!
+                (err, rows) <- @db.all(sql, _)
+                    cb(err, rows)
+ 
+    find_each: (sql, cb) ->
+        if @db?
+            () <~ @db.serialize!
+                (err, row) <- @db.each(sql, _)
+                    cb(err, row)
+
+    close: () ->
+        @db.close!
+
+exports.MoeDB = MoeDB
+
+

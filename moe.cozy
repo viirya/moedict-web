@@ -1,0 +1,36 @@
+
+cli = require('cli')
+
+options = cli.parse
+    db_path: ['d', 'SQLite database path', 'string']
+    query: ['q', 'SQL query', 'string']
+
+sqlite3 = require('sqlite3').verbose!
+db = new sqlite3.Database(options.db_path)
+
+col = "title"
+
+if /%$/.exec(options.query)
+    col = "def"
+    options.query = "%#{options.query}"
+else
+    if (new_query = options.query.replace(/\$$/, '')) is options.query
+        options.query += '%'
+    else
+        options.query = new_query
+
+() <- db.serialize!
+    sql = """SELECT '' || title || '\t' || heteronyms.bopomofo || '\n» ' || group_concat(
+              def, '\n» '
+          ) || '\n' as result
+            FROM entries
+            JOIN heteronyms ON entry_id = entries.id
+            JOIN definitions ON heteronym_id = heteronyms.id
+           WHERE #{col} LIKE '#{options.query}'
+        GROUP BY title, heteronyms.bopomofo;"""
+
+    (err, row) <- db.each(sql, _)
+        console.log(row.result);
+
+db.close!
+

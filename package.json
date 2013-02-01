@@ -1,0 +1,25 @@
+{
+  "author": "Liang-Chi Hsieh <viirya@gmail.com>",
+  "name": "moedict-web,
+  "description": "REST API for moedict",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/viirya/moedict-web.git"
+  },
+  "engines": {
+    "node": ">= 0.6.13 && < 0.9.0"
+  },
+  "dependencies": {
+    "underscore":"latest",
+    "cli":"latest",
+    "line-parser":"latest",
+    "sqlite3": "latest",
+    "cozy-script": "latest",
+    "express": "latest",
+    "jade": "latest",
+    "stylus": "latest",
+    "nib": "latest"
+  },
+  "devDependencies": {}
+}

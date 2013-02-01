@@ -1,0 +1,26 @@
+
+cli = require('cli')
+MoeDB = require('./db.js').MoeDB
+
+options = cli.parse
+    db_path: ['d', 'SQLite database path', 'string']
+    query: ['q', 'SQL query', 'string']
+
+db = new MoeDB(options.db_path)
+
+col = "title"
+
+if /%$/.exec(options.query)
+    col = "def"
+    options.query = "%#{options.query}"
+    db.find_by_def(options.query)
+else
+    if (new_query = options.query.replace(/\$$/, '')) is options.query
+        options.query += '%'
+    else
+        options.query = new_query
+
+    db.find_by_title(options.query)
+
+db.close!
+
