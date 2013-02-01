@@ -1,6 +1,6 @@
 {
   "author": "Liang-Chi Hsieh <viirya@gmail.com>",
-  "name": "moedict-web,
+  "name": "moedict-web",
   "description": "REST API for moedict",
   "version": "0.0.1",
   "repository": {
