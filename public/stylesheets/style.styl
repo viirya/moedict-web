@@ -1,0 +1,109 @@
+/*
+ * Import nib
+ */
+@import 'nib'
+
+@font-face
+    font-family Extra
+    src url(HANNOMMoEExtra-Regular.otf) format(truetype),
+         url(HANNOMMoEExtra-Regular.woff) format(woff);
+
+@font-face 
+    font-family Subset
+    src url(HannomMoeSubset.otf) format(truetype),
+         url(HannomMoeSubset.woff) format(woff);
+
+/*
+ * Nib provides a CSS reset
+ */
+global-reset()
+
+/*
+ * Store the main color and
+ * background color as variables
+ */
+main-color = #fa5b4d
+background-color = #faf9f0
+
+body
+  font-family sans-serif, "Subset", "Extra", "HAN NOM A", "HAN NOM B"
+  background-color background-color
+  color #444
+
+header
+  padding 50px 10px
+  color #fff
+  font-size 25px
+  text-align center
+
+  /*
+   * Note the use of the `main-color`
+   * variable and the `darken` function
+   */
+  background-color main-color
+  border-bottom 1px solid darken(main-color, 30%)
+  text-shadow 0px -1px 0px darken(main-color, 30%)
+
+.container
+  width 800px
+  height auto
+  margin 50px auto
+  overflow hidden
+
+.main-content
+  float left
+  height auto
+  width 800px
+
+  p
+    margin-bottom 20px
+
+  #query
+    width 95%
+    padding 5px
+    height 36pt
+    font-size 16pt
+    border-radius 5px
+    margin-bottom 50pt
+    //position fixed
+    margin-left: 1%;
+    margin-right: 1%;
+ 
+  #dictcontent
+    box-shadow 1px 1px 3px 0px #999
+    border 1px solid #ddd
+    margin-bottom: 50pt
+    padding 5px 10px
+    margin-left 1%
+    margin-right 1%
+    height auto
+    background #fff
+    border-radius: 10px
+    bottom 5px
+    word-break: break-all
+
+    h1#title
+        font-size 18pt
+        margin-top 5px
+        padding 5px 10px
+
+    ol
+        list-style-type decimal    
+        padding 5px 10px 5px 10px
+        font-size 14pt
+        margin-left 30px
+ 
+    p.definition
+        font-size 14pt
+        margin-top 5px
+        padding 5px 10px 5px 10px
+    
+    span#bopomofo
+        font-size 14pt
+        margin-top 5px
+        padding 5px 10px
+        font-family: "Subset", "Extra", "Courier New", "教育部標準楷書", "標楷體", BiaoKai, sans-serif;
+
+p
+  line-height 1.8
+

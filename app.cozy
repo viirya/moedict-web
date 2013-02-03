@@ -1,0 +1,68 @@
+
+express = require('express')
+stylus = require('stylus')
+nib = require('nib')
+
+cli = require('cli')
+MoeDB = require('./db.js').MoeDB
+
+options = cli.parse
+    db_path: ['d', 'SQLite database path', 'string']
+
+db = new MoeDB(options.db_path)
+
+app = express()
+
+compile = (str, path) ->
+    return stylus(str).set('filename', path).use(nib())
+
+app.set('views', __dirname + '/views')
+app.set('view engine', 'jade')
+app.set('view options', { layout: false })
+app.use(express.logger())
+app.use(express.bodyParser())
+app.use(express.cookieParser())
+app.use(express.session(secret: "moe"))
+app.use(stylus.middleware { src: __dirname + '/public', compile: compile})
+app.use(express.static(__dirname + '/public'))
+
+
+find_in_dict = (query, cb) ->
+
+    col = "title"
+
+    if /%$/.exec(query)
+        #query = query.replace(/&$/, '')
+        col = "def"
+        query = "%#{query}"
+        db.find_all_by_def(query, cb)
+    else
+        if (new_query = query.replace(/\$$/, '')) is query
+            query += '%'
+        else
+            query = new_query
+
+        db.find_all_by_title(query, cb)
+
+
+(req, res) <- app.get('/q/:query', _)
+
+    (err, rows) <- find_in_dict(req.params.query, _)
+        for row in rows
+            defs = row.def.split(/\n/)
+            row.def = defs
+            delete row.result
+        res.send(rows)
+
+(req, res) <- app.get('/q/title/:query', _)
+
+    (err, rows) <- db.find_all_titles_by_title(req.params.query, _)
+        res.send(rows)
+
+(req, res) <- app.get('/', _)
+
+    res.render('index')        
+    
+
+app.listen(3000)
+

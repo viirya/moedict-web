@@ -5,7 +5,12 @@ class MoeDB
 
     constructor: (@db_path) ->
         @db = new sqlite3.Database(@db_path)
-
+ 
+        @sql_only_title = (query) ->
+            """SELECT title
+            FROM entries
+            WHERE title LIKE '#{query}%';"""
+ 
         @sql = (col, query) ->
             """SELECT '' || title || '\t' || heteronyms.bopomofo || '\n» ' || group_concat(
               def, '\n» '
@@ -18,6 +23,7 @@ class MoeDB
 
         @sql_by_title = @sql('title', _)
         @sql_by_def = @sql('def', _)
+
         @def_cb = (err, row) ->
             console.log(row)
             console.log(row.result)
@@ -27,6 +33,9 @@ class MoeDB
 
     find_by_def: (def, cb = @def_cb) ->
         @find_each(@sql_by_def(def), cb)
+ 
+    find_all_titles_by_title: (title, cb = @def_cb) ->
+        @find_all(@sql_only_title(title), cb)
  
     find_all_by_title: (title, cb = @def_cb) ->
         @find_all(@sql_by_title(title), cb)

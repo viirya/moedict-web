@@ -1,0 +1,21 @@
+!!!5
+html(ng-app='moedict-web', lang="zh-TW")
+  head
+    title Moe API
+    meta(charset="utf-8")
+    link(rel='stylesheet', href='http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    header
+      h1 萌典 Web Client
+    .container
+      .main-content
+        block content
+    footer
+  script(src='/javascript/jquery-1.7.2.min.js', type='text/javascript')
+  script(src='http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/bootstrap.min.js', type='text/javascript')
+  script(src='http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js', type='text/javascript')
+  script(src='http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular-resource.min.js', type='text/javascript')
+  script(src='/javascript/angular-strap.js', type='text/javascript')
+  script(src='/javascript/app.js', type='text/javascript')
+

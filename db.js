@@ -21,6 +21,9 @@
     function MoeDB(db_path) {
       this.db_path = db_path;
       this.db = new sqlite3.Database(this.db_path);
+      this.sql_only_title = function(query) {
+        return "SELECT title\nFROM entries\nWHERE title LIKE '" + query + "%';";
+      };
       this.sql = function(col, query) {
         return "SELECT '' || title || '\t' || heteronyms.bopomofo || '\n» ' || group_concat(\n  def, '\n» '\n) || '\n' as result, title, heteronyms.bopomofo as bopomofo, group_concat(def, '\n') as def\nFROM entries\nJOIN heteronyms ON entry_id = entries.id\nJOIN definitions ON heteronym_id = heteronyms.id\nWHERE " + col + " LIKE '" + query + "'\nGROUP BY title, heteronyms.bopomofo;";
       };
@@ -44,6 +47,13 @@
         cb = this.def_cb;
       }
       return this.find_each(this.sql_by_def(def), cb);
+    };
+
+    MoeDB.prototype.find_all_titles_by_title = function(title, cb) {
+      if (cb == null) {
+        cb = this.def_cb;
+      }
+      return this.find_all(this.sql_only_title(title), cb);
     };
 
     MoeDB.prototype.find_all_by_title = function(title, cb) {

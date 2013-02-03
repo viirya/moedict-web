@@ -1,0 +1,23 @@
+
+app = angular.module('moedict-web', ['ngResource', '$strap.directives'])
+
+($scope, $resource) <- app.controller('MoeDictCtrl', _)
+
+    MoeDict = $resource('/q/:query$')
+    MoeTitleDict = $resource('/q/title/:query')
+ 
+    $scope.dict_items = [] 
+    $scope.dict_content = {}
+
+    $scope.change = () ->
+        $scope.dict_content = $scope.dict_q
+        if $scope.dict_q.length is 1
+            dict_items = () <- MoeTitleDict.query({query: $scope.dict_q}, _)
+                $scope.dict_items = []
+                for item in dict_items
+                    $scope.dict_items.push(item.title)    
+        dict_content = () <- MoeDict.query({query: $scope.dict_q}, _)
+            if dict_content? and dict_content[0]? and dict_content[0].title?
+                dict_content[0].bopomofo = dict_content[0].bopomofo.replace(/^(\s*)/, '')
+                $scope.dict_content = dict_content[0]
+
