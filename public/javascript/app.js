@@ -5,17 +5,18 @@
   app = angular.module('moedict-web', ['ngResource', '$strap.directives']);
 
   app.controller('MoeDictCtrl', function($scope, $resource) {
-    var MoeDict, MoeTitleDict;
+    var MoeDict, MoeTitleDict, last_title_q;
     MoeDict = $resource('/q/:query$');
     MoeTitleDict = $resource('/q/title/:query');
     $scope.dict_items = [];
     $scope.dict_content = {};
+    last_title_q = ' ';
     return $scope.change = function() {
       var dict_content, dict_items;
-      $scope.dict_content = $scope.dict_q;
-      if ($scope.dict_q.length === 1) {
+      if ($scope.dict_q.length >= 1 && $scope.dict_q.indexOf(last_title_q) !== 0) {
+        last_title_q = $scope.dict_q.substring(0, 1);
         dict_items = MoeTitleDict.query({
-          query: $scope.dict_q
+          query: last_title_q
         }, function() {
           var item, _i, _len, _results;
           $scope.dict_items = [];

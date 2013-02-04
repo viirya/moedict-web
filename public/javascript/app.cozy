@@ -8,11 +8,12 @@ app = angular.module('moedict-web', ['ngResource', '$strap.directives'])
  
     $scope.dict_items = [] 
     $scope.dict_content = {}
+    last_title_q = ' '
 
     $scope.change = () ->
-        $scope.dict_content = $scope.dict_q
-        if $scope.dict_q.length is 1
-            dict_items = () <- MoeTitleDict.query({query: $scope.dict_q}, _)
+        if $scope.dict_q.length >= 1 and $scope.dict_q.indexOf(last_title_q) isnt 0
+            last_title_q = $scope.dict_q.substring(0, 1)
+            dict_items = () <- MoeTitleDict.query({query: last_title_q}, _)
                 $scope.dict_items = []
                 for item in dict_items
                     $scope.dict_items.push(item.title)    
