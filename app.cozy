@@ -2,6 +2,7 @@
 express = require('express')
 stylus = require('stylus')
 nib = require('nib')
+util = require('util')
 
 cli = require('cli')
 MoeDB = require('./db.js').MoeDB
@@ -26,6 +27,9 @@ app.use(express.session(secret: "moe"))
 app.use(stylus.middleware { src: __dirname + '/public', compile: compile})
 app.use(express.static(__dirname + '/public'))
 
+(error, req, res, next) <- app.use!
+    console.log(error)
+    res.send(500, {error: util.inspect(error)})
 
 find_in_dict = (query, cb) ->
 
