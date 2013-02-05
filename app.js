@@ -129,7 +129,7 @@
       return def_str.substr(loc, 1) + to_clickable(def_str, loc + 1);
     };
     return find_in_dict(req.params.query, function(err, rows) {
-      var def, defs, last_def, linked_defs, row, _i, _j, _len, _len1;
+      var def, defs, linked_defs, row, _i, _j, _len, _len1;
       for (_i = 0, _len = rows.length; _i < _len; _i++) {
         row = rows[_i];
         defs = row.def.split(/\n/);
@@ -142,9 +142,6 @@
         row.def = linked_defs;
         delete row.result;
       }
-      last_def = rows[rows.length - 1].def;
-      last_def = last_def[last_def.length - 1];
-      last_def += "<script type=\"text/javascript\">$(\"a\").click(function(event) {\nreturn window.updater(event.target.text);\n});</script>";
       return res.send(rows);
     });
   });
