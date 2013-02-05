@@ -8,6 +8,5 @@ block content
         {{dict_content.bopomofo}}
       ol
         li(ng-repeat="def in dict_content.def")
-          p.definition
-            {{def}}
- 
+          p.definition(ng-bind-html-unsafe="def")
+

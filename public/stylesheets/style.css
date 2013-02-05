@@ -181,6 +181,11 @@ header {
   margin-top: 5px;
   padding: 5px 10px 5px 10px;
 }
+.main-content #dictcontent a {
+  color: inherit;
+  text-decoration: none;
+  font-size: 14pt;
+}
 .main-content #dictcontent span#bopomofo {
   font-size: 14pt;
   margin-top: 5px;

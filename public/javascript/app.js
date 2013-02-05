@@ -6,15 +6,15 @@
 
   app.controller('MoeDictCtrl', function($scope, $resource) {
     var MoeDict, MoeTitleDict, last_title_q;
-    MoeDict = $resource('/q/:query$');
+    MoeDict = $resource('/q/web/:query$');
     MoeTitleDict = $resource('/q/title/:query');
     $scope.dict_items = [];
     $scope.dict_content = {};
     last_title_q = ' ';
-    return $scope.change = function() {
+    window.updater = function(query) {
       var dict_content, dict_items;
-      if ($scope.dict_q.length >= 1 && $scope.dict_q.indexOf(last_title_q) !== 0) {
-        last_title_q = $scope.dict_q.substring(0, 1);
+      if (query.length >= 1 && query.indexOf(last_title_q) !== 0) {
+        last_title_q = query.substring(0, 1);
         dict_items = MoeTitleDict.query({
           query: last_title_q
         }, function() {
@@ -29,14 +29,25 @@
         });
       }
       return dict_content = MoeDict.query({
-        query: $scope.dict_q
+        query: query
       }, function() {
         if ((dict_content != null) && (dict_content[0] != null) && (dict_content[0].title != null)) {
           dict_content[0].bopomofo = dict_content[0].bopomofo.replace(/^(\s*)/, '');
-          return $scope.dict_content = dict_content[0];
+          $scope.dict_content = dict_content[0];
+          return history.pushState(null, null, "#" + query);
         }
       });
     };
+    return $scope.change = function() {
+      return updater($scope.dict_q);
+    };
+  });
+
+  $(document).ready(function() {
+    var match;
+    if (match = /^#(.*)/.exec(location.hash)) {
+      return window.updater(match[1]);
+    }
   });
 
 }).call(this);

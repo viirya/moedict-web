@@ -3,22 +3,33 @@ app = angular.module('moedict-web', ['ngResource', '$strap.directives'])
 
 ($scope, $resource) <- app.controller('MoeDictCtrl', _)
 
-    MoeDict = $resource('/q/:query$')
+    MoeDict = $resource('/q/web/:query$')
     MoeTitleDict = $resource('/q/title/:query')
  
     $scope.dict_items = [] 
     $scope.dict_content = {}
     last_title_q = ' '
 
-    $scope.change = () ->
-        if $scope.dict_q.length >= 1 and $scope.dict_q.indexOf(last_title_q) isnt 0
-            last_title_q = $scope.dict_q.substring(0, 1)
+    window.updater = (query) ->
+        if query.length >= 1 and query.indexOf(last_title_q) isnt 0
+            last_title_q = query.substring(0, 1)
             dict_items = () <- MoeTitleDict.query({query: last_title_q}, _)
                 $scope.dict_items = []
                 for item in dict_items
                     $scope.dict_items.push(item.title)    
-        dict_content = () <- MoeDict.query({query: $scope.dict_q}, _)
+
+        dict_content = () <- MoeDict.query({query: query}, _)
             if dict_content? and dict_content[0]? and dict_content[0].title?
                 dict_content[0].bopomofo = dict_content[0].bopomofo.replace(/^(\s*)/, '')
                 $scope.dict_content = dict_content[0]
+
+                history.pushState(null, null, "##{query}")
+
+    $scope.change = () ->
+        updater($scope.dict_q)
+
+() <- $(document).ready!
+    if match = /^#(.*)/.exec(location.hash)
+        window.updater(match[1])
+
 

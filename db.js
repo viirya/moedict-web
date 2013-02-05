@@ -21,6 +21,9 @@
     function MoeDB(db_path) {
       this.db_path = db_path;
       this.db = new sqlite3.Database(this.db_path);
+      this.sql_all_titles = function() {
+        return "SELECT title\nFROM entries;";
+      };
       this.sql_only_title = function(query) {
         return "SELECT title\nFROM entries\nWHERE title LIKE '" + query + "%';";
       };
@@ -34,6 +37,13 @@
         return console.log(row.result);
       };
     }
+
+    MoeDB.prototype.get_all_titles = function(cb) {
+      if (cb == null) {
+        cb = this.def_cb;
+      }
+      return this.find_all(this.sql_all_titles(), cb);
+    };
 
     MoeDB.prototype.find_by_title = function(title, cb) {
       if (cb == null) {

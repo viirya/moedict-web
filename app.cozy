@@ -31,6 +31,14 @@ app.use(express.static(__dirname + '/public'))
     console.log(error)
     res.send(500, {error: util.inspect(error)})
 
+title_strs = ''
+(err, rows) <- db.get_all_titles!
+    titles = []
+    for row in rows
+        titles.push(row.title)
+    title_strs = "\n" + titles.join("\n")
+    console.log("MoeDict server is ready")
+
 find_in_dict = (query, cb) ->
 
     col = "title"
@@ -57,6 +65,52 @@ find_in_dict = (query, cb) ->
             row.def = defs
             delete row.result
         res.send(rows)
+ 
+(req, res) <- app.get('/q/web/:query', _)
+
+    punctuations = ['，', '。', '（', '）', '「', '」']
+
+    to_clickable = (def_str, loc) ->
+        if loc >= def_str.length
+            return ''
+
+        step = 1
+        last_sub_def_str = ''
+        last_found_step = 0
+        while loc + step < def_str.length
+            sub_def_str = def_str.substr(loc, step)
+            #found_index = title_strs.indexOf("\n" + sub_def_str) + 1
+            if punctuations.indexOf(sub_def_str.substr(sub_def_str.length - 1, 1)) is -1 and (found_index = title_strs.indexOf("\n" + sub_def_str) + 1) > 0
+                if title_strs.substr(found_index + step, 1) is "\n"
+                    last_sub_def_str = sub_def_str
+                    last_found_step = step
+            else
+                return "<a href='##{last_sub_def_str}'>#{last_sub_def_str}</a>" + to_clickable(def_str, loc + last_found_step) if last_found_step >= 1
+            step++
+
+        def_str.substr(loc, 1) + to_clickable(def_str, loc + 1)
+
+    (err, rows) <- find_in_dict(req.params.query, _)
+        for row in rows
+            defs = row.def.split(/\n/)
+            linked_defs = []
+            for def in defs
+                linked_defs.push(to_clickable(def, 0))
+
+            linked_defs[defs.length - 1] += """<script type="text/javascript">$("a").click(function(event) {
+                return window.updater(event.target.text);
+                });</script>"""
+ 
+            row.def = linked_defs
+            delete row.result
+
+        last_def = rows[rows.length - 1].def
+        last_def = last_def[last_def.length - 1]
+        last_def += """<script type="text/javascript">$("a").click(function(event) {
+            return window.updater(event.target.text);
+            });</script>"""
+
+        res.send(rows)
 
 (req, res) <- app.get('/q/title/:query', _)
 
@@ -67,6 +121,6 @@ find_in_dict = (query, cb) ->
 
     res.render('index')        
     
-
 app.listen(8080)
+
 

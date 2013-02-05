@@ -5,6 +5,10 @@ class MoeDB
 
     constructor: (@db_path) ->
         @db = new sqlite3.Database(@db_path)
+
+        @sql_all_titles = () ->
+            """SELECT title
+            FROM entries;"""
  
         @sql_only_title = (query) ->
             """SELECT title
@@ -27,6 +31,9 @@ class MoeDB
         @def_cb = (err, row) ->
             console.log(row)
             console.log(row.result)
+
+    get_all_titles: (cb = @def_cb) ->
+        @find_all(@sql_all_titles!, cb)
  
     find_by_title: (title, cb = @def_cb) ->
         @find_each(@sql_by_title(title), cb)
