@@ -97,7 +97,7 @@ find_in_dict = (query, cb) ->
                 linked_defs.push(to_clickable(def, 0))
 
             linked_defs[defs.length - 1] += """<script type="text/javascript">$("a").click(function(event) {
-                return window.updater(event.target.text);
+                return window.get_dict_content(event.target.text);
                 });</script>"""
  
             row.def = linked_defs

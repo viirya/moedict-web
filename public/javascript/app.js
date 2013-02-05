@@ -12,10 +12,14 @@
     $scope.dict_content = {};
     last_title_q = ' ';
     window.updater = function(query) {
-      var dict_content, dict_items;
+      auto_complete(query);
+      return get_dict_content(query);
+    };
+    window.auto_complete = function(query) {
+      var dict_items;
       if (query.length >= 1 && query.indexOf(last_title_q) !== 0) {
         last_title_q = query.substring(0, 1);
-        dict_items = MoeTitleDict.query({
+        return dict_items = MoeTitleDict.query({
           query: last_title_q
         }, function() {
           var item, _i, _len, _results;
@@ -28,6 +32,9 @@
           return _results;
         });
       }
+    };
+    window.get_dict_content = function(query) {
+      var dict_content;
       return dict_content = MoeDict.query({
         query: query
       }, function() {
@@ -46,7 +53,7 @@
   $(document).ready(function() {
     var match;
     if (match = /^#(.*)/.exec(location.hash)) {
-      return window.updater(match[1]);
+      return window.get_dict_content(match[1]);
     }
   });
 

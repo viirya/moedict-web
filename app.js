@@ -138,7 +138,7 @@
           def = defs[_j];
           linked_defs.push(to_clickable(def, 0));
         }
-        linked_defs[defs.length - 1] += "<script type=\"text/javascript\">$(\"a\").click(function(event) {\nreturn window.updater(event.target.text);\n});</script>";
+        linked_defs[defs.length - 1] += "<script type=\"text/javascript\">$(\"a\").click(function(event) {\nreturn window.get_dict_content(event.target.text);\n});</script>";
         row.def = linked_defs;
         delete row.result;
       }

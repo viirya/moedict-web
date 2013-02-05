@@ -11,12 +11,19 @@ app = angular.module('moedict-web', ['ngResource', '$strap.directives'])
     last_title_q = ' '
 
     window.updater = (query) ->
+        auto_complete(query)
+        get_dict_content(query)
+
+    window.auto_complete = (query) ->
+
         if query.length >= 1 and query.indexOf(last_title_q) isnt 0
             last_title_q = query.substring(0, 1)
             dict_items = () <- MoeTitleDict.query({query: last_title_q}, _)
                 $scope.dict_items = []
                 for item in dict_items
                     $scope.dict_items.push(item.title)    
+
+    window.get_dict_content = (query) ->
 
         dict_content = () <- MoeDict.query({query: query}, _)
             if dict_content? and dict_content[0]? and dict_content[0].title?
@@ -30,6 +37,6 @@ app = angular.module('moedict-web', ['ngResource', '$strap.directives'])
 
 () <- $(document).ready!
     if match = /^#(.*)/.exec(location.hash)
-        window.updater(match[1])
+        window.get_dict_content(match[1])
 
 
