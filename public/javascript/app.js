@@ -65,11 +65,13 @@
     query_with_hash = function() {
       var match;
       if (match = /^#(.*)/.exec(location.hash)) {
-        return window.get_dict_content(match[1]);
+        window.get_dict_content(match[1]);
+        return $('#query').scope().dict_q = match[1];
       }
     };
     window.onhashchange = query_with_hash;
-    return query_with_hash();
+    query_with_hash();
+    return console.log($('#query').scope().dict_q);
   });
 
 }).call(this);

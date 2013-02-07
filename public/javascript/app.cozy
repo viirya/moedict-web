@@ -48,6 +48,7 @@ app = angular.module('moedict-web', ['ngResource', '$strap.directives'])
     query_with_hash = () ->
         if match = /^#(.*)/.exec(location.hash)
             window.get_dict_content(match[1])
+            $('#query').scope!.dict_q = match[1]
 
     window.onhashchange = query_with_hash
     query_with_hash!
