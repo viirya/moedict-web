@@ -68,7 +68,7 @@ find_in_dict = (query, cb) ->
  
 (req, res) <- app.get('/q/web/:query', _)
 
-    punctuations = ['，', '。', '（', '）', '「', '」']
+    punctuations = ['，', '。', '（', '）', '「', '」', '．', '：', '、']
 
     to_clickable = (def_str, loc) ->
         if loc >= def_str.length
@@ -77,10 +77,12 @@ find_in_dict = (query, cb) ->
         step = 1
         last_sub_def_str = ''
         last_found_step = 0
-        if punctuations.indexOf(def_str.substr(loc, 1)) is -1
+        first_char = def_str.substr(loc, 1)
+        if punctuations.indexOf(first_char) is -1 and not /[\d|a-zA-Z]/.test(first_char)
             while loc + step <= def_str.length
                 sub_def_str = def_str.substr(loc, step)
-                if punctuations.indexOf(sub_def_str.substr(sub_def_str.length - 1, 1)) is -1 and (found_index = title_strs.indexOf("\n" + sub_def_str) + 1) > 0
+                last_char = sub_def_str.substr(sub_def_str.length - 1, 1)
+                if punctuations.indexOf(last_char) is -1 and not /[\d|a-zA-Z]/.test(last_char) and (found_index = title_strs.indexOf("\n" + sub_def_str) + 1) > 0
                     if (title_strs.indexOf("\n" + sub_def_str + "\n") + 1) > 0
                         last_sub_def_str = sub_def_str
                         last_found_step = step

@@ -103,19 +103,21 @@
 
   app.get('/q/web/:query', function(req, res) {
     var punctuations, to_clickable;
-    punctuations = ['，', '。', '（', '）', '「', '」'];
+    punctuations = ['，', '。', '（', '）', '「', '」', '．', '：', '、'];
     to_clickable = function(def_str, loc) {
-      var found_index, last_found_step, last_sub_def_str, step, sub_def_str;
+      var first_char, found_index, last_char, last_found_step, last_sub_def_str, step, sub_def_str;
       if (loc >= def_str.length) {
         return '';
       }
       step = 1;
       last_sub_def_str = '';
       last_found_step = 0;
-      if (punctuations.indexOf(def_str.substr(loc, 1)) === -1) {
+      first_char = def_str.substr(loc, 1);
+      if (punctuations.indexOf(first_char) === -1 && !/[\d|a-zA-Z]/.test(first_char)) {
         while (loc + step <= def_str.length) {
           sub_def_str = def_str.substr(loc, step);
-          if (punctuations.indexOf(sub_def_str.substr(sub_def_str.length - 1, 1)) === -1 && (found_index = title_strs.indexOf("\n" + sub_def_str) + 1) > 0) {
+          last_char = sub_def_str.substr(sub_def_str.length - 1, 1);
+          if (punctuations.indexOf(last_char) === -1 && !/[\d|a-zA-Z]/.test(last_char) && (found_index = title_strs.indexOf("\n" + sub_def_str) + 1) > 0) {
             if ((title_strs.indexOf("\n" + sub_def_str + "\n") + 1) > 0) {
               last_sub_def_str = sub_def_str;
               last_found_step = step;
