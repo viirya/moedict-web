@@ -21,6 +21,9 @@
     function MoeDB(db_path) {
       this.db_path = db_path;
       this.db = new sqlite3.Database(this.db_path);
+      this.sql_all_definitions = function() {
+        return "SELECT id, def \nFROM definitions;";
+      };
       this.sql_all_titles = function() {
         return "SELECT title\nFROM entries;";
       };
@@ -37,6 +40,13 @@
         return console.log(row.result);
       };
     }
+
+    MoeDB.prototype.get_all_definitions = function(cb) {
+      if (cb == null) {
+        cb = this.def_cb;
+      }
+      return this.find_each(this.sql_all_definitions(), cb);
+    };
 
     MoeDB.prototype.get_all_titles = function(cb) {
       if (cb == null) {
@@ -98,6 +108,15 @@
           return _this.db.each(sql, function(err, row) {
             return cb(err, row);
           });
+        });
+      }
+    };
+
+    MoeDB.prototype.update_def = function(id, new_def) {
+      var _this = this;
+      if (this.db != null) {
+        return this.db.serialize(function() {
+          return _this.db.run("UPDATE definitions SET def = '" + new_def + "' WHERE id = " + id + ";");
         });
       }
     };

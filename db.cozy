@@ -6,6 +6,10 @@ class MoeDB
     constructor: (@db_path) ->
         @db = new sqlite3.Database(@db_path)
 
+        @sql_all_definitions = () ->
+            """SELECT id, def 
+            FROM definitions;"""
+
         @sql_all_titles = () ->
             """SELECT title
             FROM entries;"""
@@ -31,6 +35,9 @@ class MoeDB
         @def_cb = (err, row) ->
             console.log(row)
             console.log(row.result)
+
+    get_all_definitions: (cb = @def_cb) ->
+        @find_each(@sql_all_definitions!, cb)
 
     get_all_titles: (cb = @def_cb) ->
         @find_all(@sql_all_titles!, cb)
@@ -61,6 +68,11 @@ class MoeDB
             () <~ @db.serialize!
                 (err, row) <- @db.each(sql, _)
                     cb(err, row)
+
+    update_def: (id, new_def) ->
+        if @db?
+            () <~ @db.serialize!
+                @db.run("UPDATE definitions SET def = '#{new_def}' WHERE id = #{id};")
 
     close: () ->
         @db.close!

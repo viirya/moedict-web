@@ -51,10 +51,15 @@
   });
 
   $(document).ready(function() {
-    var match;
-    if (match = /^#(.*)/.exec(location.hash)) {
-      return window.get_dict_content(match[1]);
-    }
+    var query_with_hash;
+    query_with_hash = function() {
+      var match;
+      if (match = /^#(.*)/.exec(location.hash)) {
+        return window.get_dict_content(match[1]);
+      }
+    };
+    window.onhashchange = query_with_hash;
+    return query_with_hash();
   });
 
 }).call(this);
