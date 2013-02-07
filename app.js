@@ -67,16 +67,26 @@
     });
   });
 
-  title_strs = '';
+  title_strs = [];
 
   db.get_all_titles(function(err, rows) {
-    var row, titles, _i, _len;
+    var row, title_item, title_len, titles, _i, _j, _len, _len1;
     titles = [];
     for (_i = 0, _len = rows.length; _i < _len; _i++) {
       row = rows[_i];
-      titles.push(row.title);
+      if (titles[row.title.length] == null) {
+        titles[row.title.length] = [];
+      }
+      titles[row.title.length].push(row.title);
     }
-    title_strs = "\n" + titles.join("\n");
+    for (title_len = _j = 0, _len1 = titles.length; _j < _len1; title_len = ++_j) {
+      title_item = titles[title_len];
+      if (title_item != null) {
+        title_item = "\n" + title_item.join("\n");
+      }
+      title_strs[title_len] = title_item;
+    }
+    titles = [];
     return console.log("MoeDict server is ready");
   });
 
@@ -114,7 +124,7 @@
     var punctuations, to_clickable;
     punctuations = ['，', '。', '（', '）', '「', '」', '．', '：', '、'];
     to_clickable = function(def_str, loc) {
-      var first_char, found_index, last_char, last_found_step, last_sub_def_str, step, sub_def_str;
+      var first_char, last_char, last_found_step, last_sub_def_str, step, sub_def_str;
       if (loc >= def_str.length) {
         return '';
       }
@@ -126,17 +136,16 @@
         while (loc + step <= def_str.length) {
           sub_def_str = def_str.substr(loc, step);
           last_char = sub_def_str.substr(sub_def_str.length - 1, 1);
-          if (punctuations.indexOf(last_char) === -1 && !/[\d|a-zA-Z]/.test(last_char) && (found_index = title_strs.indexOf("\n" + sub_def_str) + 1) > 0) {
-            if ((title_strs.indexOf("\n" + sub_def_str + "\n") + 1) > 0) {
+          if (punctuations.indexOf(last_char) === -1 && !/[\d|a-zA-Z]/.test(last_char)) {
+            if ((title_strs[sub_def_str.length] != null) && (title_strs[sub_def_str.length].indexOf("\n" + sub_def_str + "\n") + 1) > 0) {
               last_sub_def_str = sub_def_str;
               last_found_step = step;
             }
-          } else {
-            if (last_found_step >= 1) {
-              return ("<a href='#" + last_sub_def_str + "'>" + last_sub_def_str + "</a>") + to_clickable(def_str, loc + last_found_step);
-            }
           }
           step++;
+        }
+        if (last_found_step >= 1) {
+          return ("<a href='#" + last_sub_def_str + "'>" + last_sub_def_str + "</a>") + to_clickable(def_str, loc + last_found_step);
         }
       }
       return def_str.substr(loc, 1) + to_clickable(def_str, loc + 1);

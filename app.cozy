@@ -41,12 +41,16 @@ app.use(express.static(__dirname + '/public'))
     console.log(error)
     res.send(500, {error: util.inspect(error)})
 
-title_strs = ''
+title_strs = []
 (err, rows) <- db.get_all_titles!
     titles = []
     for row in rows
-        titles.push(row.title)
-    title_strs = "\n" + titles.join("\n")
+        titles[row.title.length] = [] if not titles[row.title.length]?
+        titles[row.title.length].push(row.title)
+    for title_item, title_len in titles
+        title_item = "\n" + title_item.join("\n") if title_item?
+        title_strs[title_len] = title_item
+    titles = []
     console.log("MoeDict server is ready")
 
 find_in_dict = (query, cb) ->
@@ -92,13 +96,13 @@ find_in_dict = (query, cb) ->
             while loc + step <= def_str.length
                 sub_def_str = def_str.substr(loc, step)
                 last_char = sub_def_str.substr(sub_def_str.length - 1, 1)
-                if punctuations.indexOf(last_char) is -1 and not /[\d|a-zA-Z]/.test(last_char) and (found_index = title_strs.indexOf("\n" + sub_def_str) + 1) > 0
-                    if (title_strs.indexOf("\n" + sub_def_str + "\n") + 1) > 0
+                if punctuations.indexOf(last_char) is -1 and not /[\d|a-zA-Z]/.test(last_char)
+                    if title_strs[sub_def_str.length]? and (title_strs[sub_def_str.length].indexOf("\n" + sub_def_str + "\n") + 1) > 0
                         last_sub_def_str = sub_def_str
                         last_found_step = step
-                else
-                    return "<a href='##{last_sub_def_str}'>#{last_sub_def_str}</a>" + to_clickable(def_str, loc + last_found_step) if last_found_step >= 1
                 step++
+
+            return "<a href='##{last_sub_def_str}'>#{last_sub_def_str}</a>" + to_clickable(def_str, loc + last_found_step) if last_found_step >= 1
 
         def_str.substr(loc, 1) + to_clickable(def_str, loc + 1)
 
