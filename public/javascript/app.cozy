@@ -9,6 +9,8 @@ app = angular.module('moedict-web', ['ngResource', '$strap.directives'])
     $scope.dict_items = [] 
     $scope.dict_content = {}
     last_title_q = ' '
+    last_q = ''
+    keyinput = false
 
     window.updater = (query) ->
         auto_complete(query)
@@ -25,14 +27,20 @@ app = angular.module('moedict-web', ['ngResource', '$strap.directives'])
 
     window.get_dict_content = (query) ->
 
+        return if query is last_q
+
+        last_q = query
         dict_content = () <- MoeDict.query({query: query}, _)
             if dict_content? and dict_content[0]? and dict_content[0].title?
                 dict_content[0].bopomofo = dict_content[0].bopomofo.replace(/^(\s*)/, '')
                 $scope.dict_content = dict_content[0]
 
-                history.pushState(null, null, "##{query}")
+                if keyinput is true
+                    history.pushState(null, null, "##{$scope.dict_q}")
+                    keyinput = false
 
     $scope.change = () ->
+        keyinput = true
         updater($scope.dict_q)
 
 () <- $(document).ready!

@@ -5,12 +5,14 @@
   app = angular.module('moedict-web', ['ngResource', '$strap.directives']);
 
   app.controller('MoeDictCtrl', function($scope, $resource) {
-    var MoeDict, MoeTitleDict, last_title_q;
+    var MoeDict, MoeTitleDict, keyinput, last_q, last_title_q;
     MoeDict = $resource('/q/web/:query$');
     MoeTitleDict = $resource('/q/title/:query');
     $scope.dict_items = [];
     $scope.dict_content = {};
     last_title_q = ' ';
+    last_q = '';
+    keyinput = false;
     window.updater = function(query) {
       auto_complete(query);
       return get_dict_content(query);
@@ -35,17 +37,25 @@
     };
     window.get_dict_content = function(query) {
       var dict_content;
+      if (query === last_q) {
+        return;
+      }
+      last_q = query;
       return dict_content = MoeDict.query({
         query: query
       }, function() {
         if ((dict_content != null) && (dict_content[0] != null) && (dict_content[0].title != null)) {
           dict_content[0].bopomofo = dict_content[0].bopomofo.replace(/^(\s*)/, '');
           $scope.dict_content = dict_content[0];
-          return history.pushState(null, null, "#" + query);
+          if (keyinput === true) {
+            history.pushState(null, null, "#" + $scope.dict_q);
+            return keyinput = false;
+          }
         }
       });
     };
     return $scope.change = function() {
+      keyinput = true;
       return updater($scope.dict_q);
     };
   });
