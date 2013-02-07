@@ -70,8 +70,7 @@
       }
     };
     window.onhashchange = query_with_hash;
-    query_with_hash();
-    return console.log($('#query').scope().dict_q);
+    return query_with_hash();
   });
 
 }).call(this);
