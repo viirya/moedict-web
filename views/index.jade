@@ -1,7 +1,8 @@
 extends layout
-block content
-  .query(ng-controller="MoeDictCtrl")
+block querybox
+  .query()
     input(id="query", autofocus, speech, x-webkit-speech, autocomplete="off", placeholder="請輸入欲查詢的字詞，例如：萌", ng-model="dict_q", ng-change="change()", bs-typeahead="dict_items", items="10")
+block content
     #dictcontent
       h1#title {{dict_content.title}}
       span#bopomofo

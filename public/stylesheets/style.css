@@ -108,22 +108,23 @@ a img {
  * background color as variables
  */
 body {
-  font-family: sans-serif, "Subset", "Extra", "HAN NOM A", "HAN NOM B";
+  font-family: "Subset", "Extra", "HAN NOM A", "HAN NOM B", sans-serif;
   background-color: #faf9f0;
   color: #444;
 }
 header {
-  padding: 50px 10px;
-  color: #fff;
-  font-size: 25px;
-  text-align: center;
+  margin-bottom: 20px;
 /*
    * Note the use of the `main-color`
    * variable and the `darken` function
    */
-  background-color: #fa5b4d;
-  border-bottom: 1px solid #df1806;
-  text-shadow: 0px -1px 0px #df1806;
+}
+header h1 {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+header span {
+  font-size: 15px;
 }
 .container {
   width: 800px;
@@ -132,23 +133,17 @@ header {
   overflow: hidden;
 }
 .main-content {
-  float: left;
-  height: auto;
-  width: 800px;
+  padding-top: 50px;
 }
 .main-content p {
   margin-bottom: 20px;
 }
 .main-content #query {
-  width: 95%;
   padding: 5px;
-  height: 36pt;
   font-size: 16pt;
   -webkit-border-radius: 5px;
   border-radius: 5px;
   margin-bottom: 50pt;
-  margin-left: 1%;
-  margin-right: 1%;
 }
 .main-content #dictcontent {
   -webkit-box-shadow: 1px 1px 3px 0px #999;
@@ -156,7 +151,7 @@ header {
   border: 1px solid #ddd;
   margin-bottom: 50pt;
   padding: 5px 10px;
-  margin-left: 1%;
+  margin-left: 50px;
   margin-right: 1%;
   height: auto;
   background: #fff;
@@ -194,7 +189,7 @@ header {
   font-size: 14pt;
   margin-top: 5px;
   padding: 5px 10px;
-  font-family: "Subset", "Extra", "Courier New", "教育部標準楷書", "標楷體", BiaoKai, sans-serif;
+  font-family: "Subset", "Extra", "教育部標準楷書", "標楷體", BiaoKai, "Courier New", sans-serif;
 }
 p {
   line-height: 1.8;
