@@ -51,8 +51,6 @@
     return next();
   };
 
-  app.use(allowCrossDomain);
-
   app.use(stylus.middleware({
     src: __dirname + '/public',
     compile: compile
@@ -106,6 +104,8 @@
       return db.find_all_by_title(query, cb);
     }
   };
+
+  app.get('/q/*', allowCrossDomain);
 
   app.get('/q/:query', function(req, res) {
     return find_in_dict(req.params.query, function(err, rows) {

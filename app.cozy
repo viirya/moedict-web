@@ -33,7 +33,7 @@ allowCrossDomain = (req, res, next) ->
 
     next!
 
-app.use(allowCrossDomain)
+#app.use(allowCrossDomain)
 app.use(stylus.middleware { src: __dirname + '/public', compile: compile})
 app.use(express.static(__dirname + '/public'))
 
@@ -70,6 +70,8 @@ find_in_dict = (query, cb) ->
 
         db.find_all_by_title(query, cb)
 
+
+app.get('/q/*', allowCrossDomain)
 
 (req, res) <- app.get('/q/:query', _)
 
