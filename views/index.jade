@@ -4,10 +4,25 @@ block querybox
     input(id="query", autofocus, speech, x-webkit-speech, autocomplete="off", placeholder="請輸入欲查詢的字詞，例如：萌", ng-model="dict_q", ng-change="change()", bs-typeahead="dict_items", items="10")
 block content
     #dictcontent
-      h1#title {{dict_content.title}}
-      span#bopomofo
-        {{dict_content.bopomofo}}
-      ol
-        li(ng-repeat="def in dict_content.def")
-          p.definition(ng-bind-html-unsafe="def")
+      .entry(ng-repeat="entry in dict_content.entries") 
+        .entry_header
+          .entry_header_l
+            h1.title {{entry.title}}
+            p.clear
+          .entry_header_r
+            span.bopomofo
+              {{entry.bopomofo}}
+            span.bopomofo2
+              {{entry.bopomofo2}}
+            p.clear
+          p.clear
+        ol
+          li(ng-repeat="definition in entry.definitions")
+            span.label.label-info(ng-bind="definition.type")
+            span.definition(ng-bind-html-unsafe="definition.def")
+            span.definition(ng-bind-html-unsafe="definition.example", ng-show="definition.example")
+            .quote(ng-show="definition.isquote")
+              span.definition(ng-repeat="quo in definition.quote", ng-bind-html-unsafe="quo")
+            
+            
 

@@ -32,12 +32,15 @@ app = angular.module('moedict-web', ['ngResource', '$strap.directives'])
         last_q = query
         dict_content = () <- MoeDict.query({query: query}, _)
             if dict_content? and dict_content[0]? and dict_content[0].title?
-                dict_content[0].bopomofo = dict_content[0].bopomofo.replace(/^(\s*)/, '')
-                $scope.dict_content = dict_content[0]
+                $scope.dict_content.entries = dict_content
+                #dict_content[0].bopomofo = dict_content[0].bopomofo.replace(/^(\s*)/, '')
+                #$scope.dict_content = dict_content[0]
 
                 if keyinput is true
                     history.pushState(null, null, "##{$scope.dict_q}")
                     keyinput = false
+
+                window.scrollTo(0, 0)
 
     $scope.change = () ->
         keyinput = true

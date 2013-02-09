@@ -22,10 +22,17 @@ class MoeDB
         @sql = (col, query) ->
             """SELECT '' || title || '\t' || heteronyms.bopomofo || '\n» ' || group_concat(
               def, '\n» '
-            ) || '\n' as result, title, heteronyms.bopomofo as bopomofo, group_concat(def, '\n') as def
+            ) || '\n' as result, title, bopomofo, bopomofo2, pinyin, group_concat(type, '\n') as type, group_concat(def, '\n') as def, group_concat(example, '\n') as example, group_concat(quote, '\n') as quote
             FROM entries
             JOIN heteronyms ON entry_id = entries.id
-            JOIN definitions ON heteronym_id = heteronyms.id
+            JOIN (
+                SELECT heteronym_id,
+                    CASE WHEN example is NULL THEN '' ELSE example END as example,
+                    CASE WHEN quote is NULL THEN '' ELSE quote END as quote,
+                    CASE WHEN def is NULL THEN '' ELSE def END as def,
+                    CASE WHEN type is NULL THEN '' ELSE type END as type
+                FROM definitions
+            ) ON heteronym_id = heteronyms.id
             WHERE #{col} LIKE '#{query}'
             GROUP BY title, heteronyms.bopomofo;"""
 

@@ -82,8 +82,19 @@ header
     bottom 5px
     word-break: break-all
 
-    h1#title
-        font-size 18pt
+    .entry
+        border-bottom 1px ridge #999
+        margin-bottom 10px
+
+    .entry_header_r
+    .entry_header_l
+        display inline-block
+        float left
+
+    h1.title
+        display inline
+        float left
+        font-size 38pt
         margin-top 5px
         padding 5px 10px
 
@@ -92,11 +103,17 @@ header
         padding 5px 10px 5px 10px
         font-size 14pt
         margin-left 30px
+    li
+        margin-bottom 10px
  
-    p.definition
+    span.nodefinition
+        display block
+
+    span.definition
         font-size 14pt
         margin-top 5px
         padding 5px 10px 5px 10px
+        display block
 
     a
         color inherit
@@ -106,11 +123,22 @@ header
     a:hover
         text-decoration underline
         color red
+    
+    p.clear
+        clear both
 
-    span#bopomofo
-        font-size 14pt
+    span.bopomofo
         margin-top 5px
+
+    span.bopomofo
+    span.bopomofo2
+    span.pinyin
+        white-space nowrap
+        clear left
+        display block
+        float left
         padding 5px 10px
+        font-size 10pt
         font-family: "Subset", "Extra", "教育部標準楷書", "標楷體", BiaoKai, "Courier New", sans-serif;
 
 p

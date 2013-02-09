@@ -71,17 +71,49 @@ find_in_dict = (query, cb) ->
         db.find_all_by_title(query, cb)
 
 
+query_dict = (query, cb) ->
+
+     (err, rows) <- find_in_dict(query, _)
+        for row in rows
+            if row.def?
+                defs = row.def.split(/\n/)
+                row.def = defs
+            if row.example?
+                examples = row.example.split(/\n/)
+                row.example = examples
+            if row.quote?
+                quotes = row.quote.split(/\n/)
+                if quotes?
+                    row.quote = []
+                    for quote in quotes
+                        row.quote.push(quote.split(','))
+            if row.type?
+                types = row.type.split(/\n/)
+                row.type = types
+
+            row.definitions = []
+            for index in [0..row.def.length - 1]
+                definition = 
+                    def: if row.def? then row.def[index] else ''
+                    quote: if row.quote? then row.quote[index] else ''
+                    example: if row.example? then row.example[index] else ''
+                    type: if row.type? then row.type[index] else ''
+                row.definitions.push(definition)
+            delete row.def
+            delete row.type
+            delete row.quote
+            delete row.example
+            delete row.result
+                    
+        cb(rows)
+ 
 app.get('/q/*', allowCrossDomain)
 
 (req, res) <- app.get('/q/:query', _)
 
-    (err, rows) <- find_in_dict(req.params.query, _)
-        for row in rows
-            defs = row.def.split(/\n/)
-            row.def = defs
-            delete row.result
+    (rows) <- query_dict(req.params.query, _)
         res.send(rows)
- 
+
 (req, res) <- app.get('/q/web/:query', _)
 
     punctuations = ['，', '。', '（', '）', '「', '」', '．', '：', '、']
@@ -108,21 +140,31 @@ app.get('/q/*', allowCrossDomain)
 
         def_str.substr(loc, 1) + to_clickable(def_str, loc + 1)
 
-    (err, rows) <- find_in_dict(req.params.query, _)
-        for row in rows
-            defs = row.def.split(/\n/)
-            linked_defs = []
-            for def in defs
-                linked_defs.push(to_clickable(def, 0))
 
-            linked_defs[defs.length - 1] += """<script type="text/javascript">$("a").click(function(event) {
-                return window.get_dict_content(event.target.text);
-                });</script>"""
- 
-            row.def = linked_defs
-            delete row.result
+    (rows) <- query_dict(req.params.query, _)
+        for row in rows
+            for definition in row.definitions
+                definition.def = to_clickable(definition.def, 0) if definition.def?
+                #definition.def += """<script type="text/javascript">$("a").click(function(event) {
+                #    return window.get_dict_content(event.target.text);
+                #    });</script>"""
+
+                definition.example = to_clickable(definition.example, 0) if definition.example?
+
+                if definition.quote[0] isnt ''
+                    definition.isquote = true
+                else
+                    definition.isquote = false
+
+                for index in [0..definition.quote.length - 1]
+                    definition.quote[index] = to_clickable(definition.quote[index], 0) if definition.quote[index]?
+                    definition.quote[index] += """<script type="text/javascript">$("a").click(function(event) {
+                        return window.get_dict_content(event.target.text);
+                        });</script>"""
+
 
         res.send(rows)
+
 
 (req, res) <- app.get('/q/title/:query', _)
 

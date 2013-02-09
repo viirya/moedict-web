@@ -159,8 +159,19 @@ header span {
   bottom: 5px;
   word-break: break-all;
 }
-.main-content #dictcontent h1#title {
-  font-size: 18pt;
+.main-content #dictcontent .entry {
+  border-bottom: 1px ridge #999;
+  margin-bottom: 10px;
+}
+.main-content #dictcontent .entry_header_r,
+.main-content #dictcontent .entry_header_l {
+  display: inline-block;
+  float: left;
+}
+.main-content #dictcontent h1.title {
+  display: inline;
+  float: left;
+  font-size: 38pt;
   margin-top: 5px;
   padding: 5px 10px;
 }
@@ -170,10 +181,17 @@ header span {
   font-size: 14pt;
   margin-left: 30px;
 }
-.main-content #dictcontent p.definition {
+.main-content #dictcontent li {
+  margin-bottom: 10px;
+}
+.main-content #dictcontent span.nodefinition {
+  display: block;
+}
+.main-content #dictcontent span.definition {
   font-size: 14pt;
   margin-top: 5px;
   padding: 5px 10px 5px 10px;
+  display: block;
 }
 .main-content #dictcontent a {
   color: inherit;
@@ -184,10 +202,21 @@ header span {
   text-decoration: underline;
   color: #f00;
 }
-.main-content #dictcontent span#bopomofo {
-  font-size: 14pt;
+.main-content #dictcontent p.clear {
+  clear: both;
+}
+.main-content #dictcontent span.bopomofo {
   margin-top: 5px;
+}
+.main-content #dictcontent span.bopomofo,
+.main-content #dictcontent span.bopomofo2,
+.main-content #dictcontent span.pinyin {
+  white-space: nowrap;
+  clear: left;
+  display: block;
+  float: left;
   padding: 5px 10px;
+  font-size: 10pt;
   font-family: "Subset", "Extra", "教育部標準楷書", "標楷體", BiaoKai, "Courier New", sans-serif;
 }
 p {

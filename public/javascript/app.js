@@ -45,12 +45,12 @@
         query: query
       }, function() {
         if ((dict_content != null) && (dict_content[0] != null) && (dict_content[0].title != null)) {
-          dict_content[0].bopomofo = dict_content[0].bopomofo.replace(/^(\s*)/, '');
-          $scope.dict_content = dict_content[0];
+          $scope.dict_content.entries = dict_content;
           if (keyinput === true) {
             history.pushState(null, null, "#" + $scope.dict_q);
-            return keyinput = false;
+            keyinput = false;
           }
+          return window.scrollTo(0, 0);
         }
       });
     };
