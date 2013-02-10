@@ -15,6 +15,15 @@ block content
             span.bopomofo2
               {{entry.bopomofo2}}
             p.clear
+          .entry_header_r
+            span.radical(ng-show="entry.radical")
+              部首
+            span.radical.label.label-warning(ng-show="entry.radical")
+              {{entry.radical}}
+            span.stroke_count(ng-show="entry.stroke_count")
+              筆劃
+            span.stroke_count(ng-show="entry.stroke_count")
+              {{entry.stroke_count}}
           p.clear
         ol
           li(ng-repeat="definition in entry.definitions")

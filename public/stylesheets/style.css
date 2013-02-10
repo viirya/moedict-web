@@ -138,6 +138,9 @@ header span {
 .main-content p {
   margin-bottom: 20px;
 }
+.main-content .query {
+  font-size: 20px;
+}
 .main-content #query {
   padding: 5px;
   font-size: 16pt;
@@ -146,22 +149,22 @@ header span {
   margin-bottom: 50pt;
 }
 .main-content #dictcontent {
-  -webkit-box-shadow: 1px 1px 3px 0px #999;
-  box-shadow: 1px 1px 3px 0px #999;
-  border: 1px solid #ddd;
   margin-bottom: 50pt;
   padding: 5px 10px;
   margin-right: 1%;
   height: auto;
-  background: #fff;
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
   bottom: 5px;
   word-break: break-all;
 }
 .main-content #dictcontent .entry {
-  border-bottom: 1px ridge #999;
+  padding-top: 10px;
   margin-bottom: 10px;
+  -webkit-box-shadow: 1px 1px 3px 0px #999;
+  box-shadow: 1px 1px 3px 0px #999;
+  border: 1px solid #ddd;
+  background: #fff;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
 }
 .main-content #dictcontent .entry_header_r,
 .main-content #dictcontent .entry_header_l {
@@ -205,6 +208,21 @@ header span {
 }
 .main-content #dictcontent p.clear {
   clear: both;
+}
+.main-content #dictcontent span.radical,
+.main-content #dictcontent span.stroke_count {
+  margin-top: 20px;
+  white-space: nowrap;
+  display: inline-block;
+  float: left;
+  padding: 5px 10px;
+  font-family: "DFKaiShu-SB-Estd-BF", "Subset", "Extra", "教育部標準楷書", "標楷體", BiaoKai, "Courier New", sans-serif;
+}
+.main-content #dictcontent span.stroke_count {
+  font-size: 20px;
+}
+.main-content #dictcontent span.radical {
+  font-size: 25px;
 }
 .main-content #dictcontent span.bopomofo {
   margin-top: 5px;

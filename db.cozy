@@ -22,7 +22,9 @@ class MoeDB
         @sql = (col, query) ->
             """SELECT '' || title || '\t' || heteronyms.bopomofo || '\n» ' || group_concat(
               def, '\n» '
-            ) || '\n' as result, title, bopomofo, bopomofo2, pinyin, group_concat(type, '\n') as type, group_concat(def, '\n') as def, group_concat(example, '\n') as example, group_concat(quote, '\n') as quote
+            ) || '\n' as result, title, radical, stroke_count, non_radical_stroke_count,
+            bopomofo, bopomofo2, pinyin, group_concat(type, '\n') as type, group_concat(def, '\n') as def,
+            group_concat(example, '\n') as example, group_concat(quote, '\n') as quote
             FROM entries
             JOIN heteronyms ON entry_id = entries.id
             JOIN (
