@@ -4,6 +4,7 @@ block querybox
     input(id="query", autofocus, speech, x-webkit-speech, autocomplete="off", placeholder="請輸入欲查詢的字詞，例如：萌", ng-model="dict_q", ng-change="change()", bs-typeahead="dict_items", items="10")
 block content
     #dictcontent
+      .noentry(ng-hide="dict_content.entries")
       .entry(ng-repeat="entry in dict_content.entries") 
         .entry_header
           .entry_header_l

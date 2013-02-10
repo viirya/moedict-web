@@ -156,6 +156,7 @@ header span {
   bottom: 5px;
   word-break: break-all;
 }
+.main-content #dictcontent .noentry,
 .main-content #dictcontent .entry {
   padding-top: 10px;
   margin-bottom: 10px;
@@ -165,6 +166,9 @@ header span {
   background: #fff;
   -webkit-border-radius: 10px;
   border-radius: 10px;
+}
+.main-content #dictcontent .noentry {
+  padding-bottom: 130px;
 }
 .main-content #dictcontent .entry_header_r,
 .main-content #dictcontent .entry_header_l {
