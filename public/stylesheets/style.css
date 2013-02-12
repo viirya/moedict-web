@@ -213,19 +213,34 @@ header span {
 .main-content #dictcontent p.clear {
   clear: both;
 }
-.main-content #dictcontent span.radical,
-.main-content #dictcontent span.stroke_count {
+.main-content #dictcontent span.radical_header {
   margin-top: 20px;
+}
+.main-content #dictcontent span.stroke_count {
+  margin-top: 21px;
+}
+.main-content #dictcontent span.stroke_count_header {
+  margin-top: 22px;
+}
+.main-content #dictcontent span.radical {
+  margin-top: 24px;
+}
+.main-content #dictcontent span.radical,
+.main-content #dictcontent span.radical_header,
+.main-content #dictcontent span.stroke_count,
+.main-content #dictcontent span.stroke_count_header {
   white-space: nowrap;
   display: inline-block;
   float: left;
   padding: 5px 10px;
   font-family: "DFKaiShu-SB-Estd-BF", "Subset", "Extra", "教育部標準楷書", "標楷體", BiaoKai, "Courier New", sans-serif;
 }
-.main-content #dictcontent span.stroke_count {
+.main-content #dictcontent span.stroke_count,
+.main-content #dictcontent span.stroke_count_header {
   font-size: 20px;
 }
-.main-content #dictcontent span.radical {
+.main-content #dictcontent span.radical,
+.main-content #dictcontent span.radical_header {
   font-size: 25px;
 }
 .main-content #dictcontent span.bopomofo {
