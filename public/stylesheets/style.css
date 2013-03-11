@@ -132,6 +132,34 @@ header span {
   margin: 50px auto;
   overflow: hidden;
 }
+@media (max-width: 620px) {
+  .main-content #dictcontent {
+    position: relative;
+    top: 200px;
+  }
+}
+@media (min-width: 621px) and (max-width: 767px) {
+  .main-content #dictcontent {
+    position: relative;
+    top: 100px;
+  }
+}
+@media (max-width: 767px) {
+  .main-content header {
+    float: left;
+  }
+  .main-content #querysection {
+    width: 96%;
+    padding-top: 10px;
+    margin: 10px;
+    -webkit-box-shadow: 1px 1px 3px 0px #999;
+    box-shadow: 1px 1px 3px 0px #999;
+    border: 1px solid #ddd;
+    background: #fff;
+    position: fixed;
+    top: 5px;
+  }
+}
 .main-content {
   padding-top: 50px;
 }
