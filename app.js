@@ -114,7 +114,7 @@
 
   query_dict = function(query, cb) {
     return find_in_dict(query, function(err, rows) {
-      var definition, defs, examples, index, quote, quotes, row, types, _i, _j, _k, _len, _len1, _ref;
+      var definition, defs, examples, index, links, quote, quotes, row, types, _i, _j, _k, _len, _len1, _ref;
       for (_i = 0, _len = rows.length; _i < _len; _i++) {
         row = rows[_i];
         if (row.def != null) {
@@ -139,13 +139,18 @@
           types = row.type.split(/\n/);
           row.type = types;
         }
+        if (row.link != null) {
+          links = row.link.split(/\n/);
+          row.link = links;
+        }
         row.definitions = [];
         for (index = _k = 0, _ref = row.def.length - 1; 0 <= _ref ? _k <= _ref : _k >= _ref; index = 0 <= _ref ? ++_k : --_k) {
           definition = {
-            def: row.def != null ? row.def[index] : '',
+            def: row.def != null ? (row.def[index] === ' ' ? '' : row.def[index]) : '',
             quote: row.quote != null ? row.quote[index] : '',
-            example: row.example != null ? row.example[index] : '',
-            type: row.type != null ? row.type[index] : ''
+            example: row.example != null ? (row.example[index] === ' ' ? '' : row.example[index]) : '',
+            type: row.type != null ? (row.type[index] === ' ' ? '' : row.type[index]) : '',
+            link: row.link != null ? (row.link[index] === ' ' ? '' : row.link[index]) : ''
           };
           row.definitions.push(definition);
         }
@@ -154,6 +159,7 @@
         delete row.quote;
         delete row.example;
         delete row.result;
+        delete row.link;
       }
       return cb(rows);
     });
@@ -210,7 +216,10 @@
           if (definition.example != null) {
             definition.example = to_clickable(definition.example, 0);
           }
-          if (definition.quote[0] !== '') {
+          if (definition.link != null) {
+            definition.link = to_clickable(definition.link, 0);
+          }
+          if (definition.quote[0] !== '' && definition.quote[0] !== ' ') {
             definition.isquote = true;
           } else {
             definition.isquote = false;

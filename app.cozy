@@ -80,35 +80,45 @@ query_dict = (query, cb) ->
 
      (err, rows) <- find_in_dict(query, _)
         for row in rows
+
             if row.def?
                 defs = row.def.split(/\n/)
                 row.def = defs
+
             if row.example?
                 examples = row.example.split(/\n/)
                 row.example = examples
+
             if row.quote?
                 quotes = row.quote.split(/\n/)
                 if quotes?
                     row.quote = []
                     for quote in quotes
                         row.quote.push(quote.split(','))
+
             if row.type?
                 types = row.type.split(/\n/)
                 row.type = types
 
+            if row.link?
+                links = row.link.split(/\n/)
+                row.link = links
+ 
             row.definitions = []
             for index in [0..row.def.length - 1]
                 definition = 
-                    def: if row.def? then row.def[index] else ''
+                    def: if row.def? then (if row.def[index] is ' ' then '' else row.def[index]) else ''
                     quote: if row.quote? then row.quote[index] else ''
-                    example: if row.example? then row.example[index] else ''
-                    type: if row.type? then row.type[index] else ''
+                    example: if row.example? then (if row.example[index] is ' ' then '' else row.example[index]) else ''
+                    type: if row.type? then (if row.type[index] is ' ' then '' else row.type[index]) else ''
+                    link: if row.link? then (if row.link[index] is ' ' then '' else row.link[index]) else ''
                 row.definitions.push(definition)
             delete row.def
             delete row.type
             delete row.quote
             delete row.example
             delete row.result
+            delete row.link
                     
         cb(rows)
  
@@ -159,7 +169,9 @@ app.get('/q/*', allowCrossDomain)
 
                 definition.example = to_clickable(definition.example, 0) if definition.example?
 
-                if definition.quote[0] isnt ''
+                definition.link = to_clickable(definition.link, 0) if definition.link?
+ 
+                if definition.quote[0] isnt '' and definition.quote[0] isnt ' '
                     definition.isquote = true
                 else
                     definition.isquote = false

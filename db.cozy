@@ -24,15 +24,17 @@ class MoeDB
               def, '\n» '
             ) || '\n' as result, title, radical, stroke_count, non_radical_stroke_count,
             bopomofo, bopomofo2, pinyin, group_concat(type, '\n') as type, group_concat(def, '\n') as def,
-            group_concat(example, '\n') as example, group_concat(quote, '\n') as quote
+            group_concat(example, '\n') as example, group_concat(quote, '\n') as quote,
+            group_concat(link, '\n') as link
             FROM entries
             JOIN heteronyms ON entry_id = entries.id
             JOIN (
                 SELECT heteronym_id,
-                    CASE WHEN example is NULL THEN '' ELSE example END as example,
-                    CASE WHEN quote is NULL THEN '' ELSE quote END as quote,
-                    CASE WHEN def is NULL THEN '' ELSE def END as def,
-                    CASE WHEN type is NULL THEN '' ELSE type END as type
+                    CASE WHEN example is NULL THEN ' ' ELSE example END as example,
+                    CASE WHEN quote is NULL THEN ' ' ELSE quote END as quote,
+                    CASE WHEN def is NULL or def is '' THEN ' ' ELSE def END as def,
+                    CASE WHEN type is NULL THEN ' ' ELSE type END as type,
+                    CASE WHEN link is NULL THEN ' ' ELSE link END as link
                 FROM definitions
             ) ON heteronym_id = heteronyms.id
             WHERE #{col} LIKE '#{query}'

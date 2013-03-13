@@ -28,11 +28,12 @@ block content
           p.clear
         ol
           li(ng-repeat="definition in entry.definitions")
-            span.label.label-info(ng-bind="definition.type")
-            span.definition(ng-bind-html-unsafe="definition.def")
+            span.label.label-info(ng-bind="definition.type", ng-show="definition.type")
+            span.definition(ng-bind-html-unsafe="definition.def", ng-show="definition.def")
             span.definition(ng-bind-html-unsafe="definition.example", ng-show="definition.example")
             .quote(ng-show="definition.isquote")
               span.definition(ng-repeat="quo in definition.quote", ng-bind-html-unsafe="quo")
+            span.definition(ng-bind-html-unsafe="definition.link", ng-show="definition.link")
             
             
 
