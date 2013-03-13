@@ -30,11 +30,11 @@ class MoeDB
             JOIN heteronyms ON entry_id = entries.id
             JOIN (
                 SELECT heteronym_id,
-                    CASE WHEN example is NULL THEN ' ' ELSE example END as example,
-                    CASE WHEN quote is NULL THEN ' ' ELSE quote END as quote,
+                    CASE WHEN example is NULL or example is '' THEN ' ' ELSE example END as example,
+                    CASE WHEN quote is NULL or quote is '' THEN ' ' ELSE quote END as quote,
                     CASE WHEN def is NULL or def is '' THEN ' ' ELSE def END as def,
-                    CASE WHEN type is NULL THEN ' ' ELSE type END as type,
-                    CASE WHEN link is NULL THEN ' ' ELSE link END as link
+                    CASE WHEN type is NULL or type is '' THEN ' ' ELSE type END as type,
+                    CASE WHEN link is NULL or link is '' THEN ' ' ELSE link END as link
                 FROM definitions
             ) ON heteronym_id = heteronyms.id
             WHERE #{col} LIKE '#{query}'
