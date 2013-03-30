@@ -282,6 +282,8 @@ header span {
 .main-content #dictcontent span.synonyms_header,
 .main-content #dictcontent span.antonyms_header {
   font-size: 12px;
+  padding: 2px;
+  margin-top: 12px;
 }
 .main-content #dictcontent span.synonyms,
 .main-content #dictcontent span.antonyms {
