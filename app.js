@@ -114,7 +114,7 @@
 
   query_dict = function(query, cb) {
     return find_in_dict(query, function(err, rows) {
-      var definition, defs, examples, index, links, quote, quotes, row, types, _i, _j, _k, _len, _len1, _ref;
+      var antonyms, def_type, definition, defs, examples, index, links, quote, quotes, row, synonyms, types, _i, _j, _k, _len, _len1, _ref;
       for (_i = 0, _len = rows.length; _i < _len; _i++) {
         row = rows[_i];
         if (row.def != null) {
@@ -143,16 +143,34 @@
           links = row.link.split(/\n/);
           row.link = links;
         }
+        if (row.synonyms != null) {
+          synonyms = row.synonyms.split(/\n/);
+          row.synonyms = synonyms;
+        }
+        if (row.antonyms != null) {
+          antonyms = row.antonyms.split(/\n/);
+          row.antonyms = antonyms;
+        }
         row.definitions = [];
+        def_type = '';
         for (index = _k = 0, _ref = row.def.length - 1; 0 <= _ref ? _k <= _ref : _k >= _ref; index = 0 <= _ref ? ++_k : --_k) {
           definition = {
             def: row.def != null ? (row.def[index] === ' ' ? '' : row.def[index]) : '',
             quote: row.quote != null ? row.quote[index] : '',
             example: row.example != null ? (row.example[index] === ' ' ? '' : row.example[index]) : '',
             type: row.type != null ? (row.type[index] === ' ' ? '' : row.type[index]) : '',
-            link: row.link != null ? (row.link[index] === ' ' ? '' : row.link[index]) : ''
+            link: row.link != null ? (row.link[index] === ' ' ? '' : row.link[index]) : '',
+            synonyms: row.synonyms != null ? (row.synonyms[index] === ' ' ? '' : row.synonyms[index]) : '',
+            antonyms: row.antonyms != null ? (row.antonyms[index] === ' ' ? '' : row.antonyms[index]) : '',
+            def_type: def_type !== '' ? def_type : ['']
           };
-          row.definitions.push(definition);
+          if (/\u20DE/.test(definition.def)) {
+            def_type = definition.def.replace(/\u20DE/g, '');
+            def_type = def_type.split(/\&nbsp/);
+          } else {
+            def_type = '';
+            row.definitions.push(definition);
+          }
         }
         delete row.def;
         delete row.type;
@@ -160,6 +178,8 @@
         delete row.example;
         delete row.result;
         delete row.link;
+        delete row.synonyms;
+        delete row.antonyms;
       }
       return cb(rows);
     });
@@ -219,6 +239,17 @@
           if (definition.link != null) {
             definition.link = to_clickable(definition.link, 0);
           }
+          if (definition.def_type[0] !== '') {
+            definition.isdef_type = true;
+          } else {
+            definition.isdef_type = false;
+          }
+          if (definition.synonyms != null) {
+            definition.synonyms = to_clickable(definition.synonyms, 0);
+          }
+          if (definition.antonyms != null) {
+            definition.antonyms = to_clickable(definition.antonyms, 0);
+          }
           if (definition.quote[0] !== '' && definition.quote[0] !== ' ') {
             definition.isquote = true;
           } else {
@@ -246,6 +277,6 @@
     return res.render('index');
   });
 
-  app.listen(8080);
+  app.listen(8081);
 
 }).call(this);

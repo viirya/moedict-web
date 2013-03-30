@@ -29,11 +29,23 @@ block content
         ol
           li(ng-repeat="definition in entry.definitions")
             span.label.label-info(ng-bind="definition.type", ng-show="definition.type")
+            .quote(ng-show="definition.isdef_type")
+              span.def_type_header.label.label-info(ng-repeat="type in definition.def_type", ng-bind="type")
             span.definition(ng-bind-html-unsafe="definition.def", ng-show="definition.def")
             span.definition(ng-bind-html-unsafe="definition.example", ng-show="definition.example")
             .quote(ng-show="definition.isquote")
               span.definition(ng-repeat="quo in definition.quote", ng-bind-html-unsafe="quo")
             span.definition(ng-bind-html-unsafe="definition.link", ng-show="definition.link")
+            span.synonyms_header.label.label-info(ng-show="definition.synonyms")
+              相似
+            span.synonyms(ng-bind-html-unsafe="definition.synonyms", ng-show="definition.synonyms")
+            p.clear
+            span.antonyms_header.label.label-info(ng-show="definition.antonyms")
+              相反
+            span.antonyms(ng-bind-html-unsafe="definition.antonyms", ng-show="definition.antonyms")
+            p.clear
+ 
+ 
             
             
 

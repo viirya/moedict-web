@@ -79,6 +79,7 @@ find_in_dict = (query, cb) ->
 query_dict = (query, cb) ->
 
      (err, rows) <- find_in_dict(query, _)
+
         for row in rows
 
             if row.def?
@@ -104,7 +105,16 @@ query_dict = (query, cb) ->
                 links = row.link.split(/\n/)
                 row.link = links
  
+            if row.synonyms?
+                synonyms = row.synonyms.split(/\n/)
+                row.synonyms = synonyms
+ 
+            if row.antonyms?
+                antonyms = row.antonyms.split(/\n/)
+                row.antonyms = antonyms
+ 
             row.definitions = []
+            def_type = ''
             for index in [0..row.def.length - 1]
                 definition = 
                     def: if row.def? then (if row.def[index] is ' ' then '' else row.def[index]) else ''
@@ -112,14 +122,26 @@ query_dict = (query, cb) ->
                     example: if row.example? then (if row.example[index] is ' ' then '' else row.example[index]) else ''
                     type: if row.type? then (if row.type[index] is ' ' then '' else row.type[index]) else ''
                     link: if row.link? then (if row.link[index] is ' ' then '' else row.link[index]) else ''
-                row.definitions.push(definition)
+                    synonyms: if row.synonyms? then (if row.synonyms[index] is ' ' then '' else row.synonyms[index]) else ''
+                    antonyms: if row.antonyms? then (if row.antonyms[index] is ' ' then '' else row.antonyms[index]) else ''
+                    def_type: if def_type isnt '' then def_type else ['']
+
+                if /\u20DE/.test(definition.def)
+                    def_type = definition.def.replace(/\u20DE/g, '')
+                    def_type = def_type.split(/\&nbsp/)
+                else
+                    def_type = ''
+                    row.definitions.push(definition)
+
             delete row.def
             delete row.type
             delete row.quote
             delete row.example
             delete row.result
             delete row.link
-                    
+            delete row.synonyms
+            delete row.antonyms
+
         cb(rows)
  
 app.get('/q/*', allowCrossDomain)
@@ -171,6 +193,17 @@ app.get('/q/*', allowCrossDomain)
 
                 definition.link = to_clickable(definition.link, 0) if definition.link?
  
+                if definition.def_type[0] isnt '' 
+                    definition.isdef_type = true
+                else
+                    definition.isdef_type = false
+
+                #for index in [0..definition.def_type.length - 1]
+                #    definition.def_type[index] = to_clickable(definition.def_type[index], 0) if definition.def_type[index]?
+                
+                definition.synonyms = to_clickable(definition.synonyms, 0) if definition.synonyms?
+                definition.antonyms = to_clickable(definition.antonyms, 0) if definition.antonyms?
+ 
                 if definition.quote[0] isnt '' and definition.quote[0] isnt ' '
                     definition.isquote = true
                 else
@@ -181,7 +214,6 @@ app.get('/q/*', allowCrossDomain)
                     definition.quote[index] += """<script type="text/javascript">$("a").click(function(event) {
                         return window.get_dict_content(event.target.text);
                         });</script>"""
-
 
         res.send(rows)
 
@@ -195,6 +227,6 @@ app.get('/q/*', allowCrossDomain)
 
     res.render('index')        
     
-app.listen(8080)
+app.listen(8081)
 
 
