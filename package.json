@@ -17,7 +17,7 @@
     "sqlite3": "latest",
     "cozy-script": "latest",
     "express": "latest",
-    "jade": "latest",
+    "jade": "0.28.1",
     "stylus": "latest",
     "nib": "latest"
   },
