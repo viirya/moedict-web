@@ -222,12 +222,16 @@ header span {
 .main-content #dictcontent span.nodefinition {
   display: block;
 }
-.main-content #dictcontent span.definition {
+.main-content #dictcontent span.definition,
+.main-content #dictcontent span.translation {
   font-size: 14pt;
   margin-top: 5px;
   padding: 5px 10px 5px 10px;
   display: block;
   line-height: 1.8;
+}
+.main-content #dictcontent span.translation {
+  font-family: "Georgia", "American Typewriter", sans-serif;
 }
 .main-content #dictcontent a {
   color: inherit;

@@ -44,6 +44,9 @@ block content
               相反
             span.antonyms(ng-bind-html-unsafe="definition.antonyms", ng-show="definition.antonyms")
             p.clear
+          li(ng-repeat="translation in entry.translations")
+            span.label.label-warning(ng-bind="translation.lang", ng-show="translation.lang")
+            span.translation(ng-bind-html-unsafe="translation.def", ng-show="translation.def")
  
  
             

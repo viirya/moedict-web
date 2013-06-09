@@ -26,9 +26,9 @@ class MoeDB
             bopomofo, bopomofo2, pinyin, group_concat(type, '\n') as type, group_concat(def, '\n') as def,
             group_concat(example, '\n') as example, group_concat(quote, '\n') as quote,
             group_concat(link, '\n') as link, group_concat(synonyms, '\n') as synonyms,
-            group_concat(antonyms, '\n') as antonyms
+            group_concat(antonyms, '\n') as antonyms, lang, lang_def
             FROM entries
-            JOIN heteronyms ON entry_id = entries.id
+            JOIN heteronyms ON heteronyms.entry_id = entries.id
             JOIN (
                 SELECT heteronym_id,
                     CASE WHEN example is NULL or example is '' THEN ' ' ELSE example END as example,
@@ -40,6 +40,10 @@ class MoeDB
                     CASE WHEN antonyms is NULL or antonyms is '' THEN ' ' ELSE antonyms END as antonyms
                 FROM definitions
             ) ON heteronym_id = heteronyms.id
+            JOIN (
+                SELECT entry_id, group_concat(lang, '\n') as lang, group_concat(def, '\n') as lang_def
+                FROM translations GROUP BY entry_id
+            ) AS translations ON translations.entry_id = entries.id
             WHERE #{col} LIKE '#{query}'
             GROUP BY title, heteronyms.bopomofo;"""
 

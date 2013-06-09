@@ -112,7 +112,25 @@ query_dict = (query, cb) ->
             if row.antonyms?
                 antonyms = row.antonyms.split(/\n/)
                 row.antonyms = antonyms
- 
+
+            if row.lang?
+                langs = row.lang.split(/\n/)
+                lang_defs = row.lang_def.split(/\n/)
+                row.translations = []
+                translations = {}
+                for index in [0..langs.length - 1]
+                    unless /CL:/.test(lang_defs[index])
+                        if translations[langs[index]]?
+                            translations[langs[index]].push(lang_defs[index])
+                        else
+                            translations[langs[index]] = [lang_defs[index]]
+
+                for lang, defs of translations
+                    translation =
+                        lang: lang
+                        def: defs.join('; ')
+                    row.translations.push(translation)
+
             row.definitions = []
             def_type = ''
             for index in [0..row.def.length - 1]
@@ -141,6 +159,8 @@ query_dict = (query, cb) ->
             delete row.link
             delete row.synonyms
             delete row.antonyms
+            delete row.lang
+            delete row.lang_def
 
         cb(rows)
  

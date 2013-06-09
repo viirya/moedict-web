@@ -114,7 +114,7 @@
 
   query_dict = function(query, cb) {
     return find_in_dict(query, function(err, rows) {
-      var antonyms, def_type, definition, defs, examples, index, links, quote, quotes, row, synonyms, types, _i, _j, _k, _len, _len1, _ref;
+      var antonyms, def_type, definition, defs, examples, index, lang, lang_defs, langs, links, quote, quotes, row, synonyms, translation, translations, types, _i, _j, _k, _l, _len, _len1, _ref, _ref1;
       for (_i = 0, _len = rows.length; _i < _len; _i++) {
         row = rows[_i];
         if (row.def != null) {
@@ -151,9 +151,32 @@
           antonyms = row.antonyms.split(/\n/);
           row.antonyms = antonyms;
         }
+        if (row.lang != null) {
+          langs = row.lang.split(/\n/);
+          lang_defs = row.lang_def.split(/\n/);
+          row.translations = [];
+          translations = {};
+          for (index = _k = 0, _ref = langs.length - 1; 0 <= _ref ? _k <= _ref : _k >= _ref; index = 0 <= _ref ? ++_k : --_k) {
+            if (!/CL:/.test(lang_defs[index])) {
+              if (translations[langs[index]] != null) {
+                translations[langs[index]].push(lang_defs[index]);
+              } else {
+                translations[langs[index]] = [lang_defs[index]];
+              }
+            }
+          }
+          for (lang in translations) {
+            defs = translations[lang];
+            translation = {
+              lang: lang,
+              def: defs.join('; ')
+            };
+            row.translations.push(translation);
+          }
+        }
         row.definitions = [];
         def_type = '';
-        for (index = _k = 0, _ref = row.def.length - 1; 0 <= _ref ? _k <= _ref : _k >= _ref; index = 0 <= _ref ? ++_k : --_k) {
+        for (index = _l = 0, _ref1 = row.def.length - 1; 0 <= _ref1 ? _l <= _ref1 : _l >= _ref1; index = 0 <= _ref1 ? ++_l : --_l) {
           definition = {
             def: row.def != null ? (row.def[index] === ' ' ? '' : row.def[index]) : '',
             quote: row.quote != null ? row.quote[index] : '',
@@ -180,6 +203,8 @@
         delete row.link;
         delete row.synonyms;
         delete row.antonyms;
+        delete row.lang;
+        delete row.lang_def;
       }
       return cb(rows);
     });
