@@ -25,7 +25,10 @@ block content
               筆劃
             span.stroke_count(ng-show="entry.stroke_count")
               {{entry.stroke_count}}
+            span.stroke.label.label-warning
+              劃
           p.clear
+        #strokes
         ol
           li(ng-repeat="definition in entry.definitions")
             span.label.label-info(ng-bind="definition.type", ng-show="definition.type")

@@ -70,7 +70,20 @@
       }
     };
     window.onhashchange = query_with_hash;
-    return query_with_hash();
+    query_with_hash();
+    return $('body').on('click', '.stroke', function() {
+      if ($('#strokes').css('display') !== 'none') {
+        return $('#strokes').fadeOut('fast', function() {
+          return $('#strokes').html('');
+        });
+      } else {
+        return $('#strokes').fadeIn('fast', function() {
+          return $('#strokes').strokeWords($('#query').scope().dict_q, {
+            svg: false
+          });
+        });
+      }
+    });
   });
 
 }).call(this);

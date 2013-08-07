@@ -251,6 +251,9 @@ header span {
 .main-content #dictcontent span.stroke_count {
   margin-top: 21px;
 }
+.main-content #dictcontent span.stroke {
+  margin-top: 24px;
+}
 .main-content #dictcontent span.stroke_count_header {
   margin-top: 22px;
 }
@@ -259,6 +262,7 @@ header span {
 }
 .main-content #dictcontent span.radical,
 .main-content #dictcontent span.radical_header,
+.main-content #dictcontent span.stroke,
 .main-content #dictcontent span.stroke_count,
 .main-content #dictcontent span.stroke_count_header {
   white-space: nowrap;
@@ -293,6 +297,9 @@ header span {
 .main-content #dictcontent span.antonyms {
   font-size: 14px;
 }
+.main-content #dictcontent span.stroke {
+  font-size: 20px;
+}
 .main-content #dictcontent span.stroke_count,
 .main-content #dictcontent span.stroke_count_header {
   font-size: 20px;
@@ -314,6 +321,10 @@ header span {
   padding: 5px 10px;
   font-size: 10pt;
   font-family: "DFKaiShu-SB-Estd-BF", "Subset", "Extra", "教育部標準楷書", "標楷體", BiaoKai, "Courier New", sans-serif;
+}
+.main-content #dictcontent #strokes {
+  clear: both;
+  display: none;
 }
 p {
   line-height: 1.8;

@@ -3,6 +3,7 @@ express = require('express')
 stylus = require('stylus')
 nib = require('nib')
 util = require('util')
+fs = require('fs')
 
 cli = require('cli')
 MoeDB = require('./db.js').MoeDB
@@ -242,6 +243,13 @@ app.get('/q/*', allowCrossDomain)
 
     (err, rows) <- db.find_all_titles_by_title(req.params.query, _)
         res.send(rows)
+
+(req, res) <- app.get('/utf8/:stroke', _)
+
+    (err, data) <- fs.readFile('utf8/' + req.params.stroke, _)
+        if (err)
+            throw err
+        res.send(data)
 
 (req, res) <- app.get('/', _)
 
